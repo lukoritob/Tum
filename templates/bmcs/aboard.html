@@ -1,0 +1,28 @@
+{% extends 'index.html' %}{% load crispy_forms_tags %}{% block content %}
+<!-- documents -->
+<div class="container">
+    <table class="table table-hover">
+        <h1>Documents.</h1>
+        <thead>
+            <tr>
+                <th>Description</th>
+                <th>Document</th>
+                <th>Upload at</th>
+                <th>Download </th>
+            </tr>
+        </thead>
+        <tbody>
+            {% csrf_token %} {% for item in documents %}
+            <tr class="datarow">
+                <td>{{item.description}}</td>
+                <td>{{item.document}}</td>
+                <td>{{item.upload_at}}</td>
+                <td>
+                    <a href="{% url 'document' item.id %}" class="btn btn-outline-info">Download PDF</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

@@ -1,0 +1,47 @@
+{% extends 'index.html' %}{% load crispy_forms_tags %}{% block content %}
+<!-- {{ trial1 }} -->
+<div class="container">
+    <table class="table table-hover">
+        <h1>Upcoming Tenders.</h1>
+        <thead>
+            <tr>
+                <th>Tender Id</th>
+                <th>Vendors Name</th>
+                <th>Project Name</th>
+                <th>Project Type</th>
+                <th>Basic Amount Ksh</th>
+                <th>Bid Close Date</th>
+                <th>Tender Type</th>
+                <th>Project File</th>
+                <th>Bid</th>
+                <th>Delete</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% csrf_token %} {% for item in trial1 %}
+            <tr class="datarow">
+                <td>{{item.Tender_Id}}</td>
+                <td>{{item.Vendors_Name}}</td>
+                <td>{{item.Project_Name}}</td>
+                <td>{{item.Project_Type}}</td>
+                <td>{{item.Basic_Amount_Ksh}}</td>
+                <td>{{item.Bid_Close_Date}}</td>
+                <td>{{item.Tender_Type}}</td>
+                <td>{{item.Project_file}}</td>
+                <td><a href="{% url 'bid' %}">{{item.Bid}}</td>
+                <td><a href="{% url '' %}">Delete</a></td>
+                <!-- <td><form action="{% url 'employee_delete' id=instance.id %}" method="POST">
+                    {% csrf_token %}
+                    <button type="submit" name="item_id" class="btn btn-outline-info">
+                    Delete
+                </button></form></td> -->
+            </tr>
+            {% endfor %}
+        </tbody>
+
+    </table>
+
+</div>
+
+
+{% endblock %}

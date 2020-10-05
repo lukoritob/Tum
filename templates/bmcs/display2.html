@@ -1,0 +1,40 @@
+{% extends 'index.html' %}{% load crispy_forms_tags %}{% block content %}
+<!-- {{ trial2 }} -->
+<div class="container">
+    <table class="table table-hover">
+        <h1>Upcoming Tenders.</h1>
+        <thead>
+            <tr>
+                <th>Tender Id</th>
+                <th>Project Name</th>
+                <th>Bid Amount Ksh</th>
+                <th>Name</th>
+                <th>Address</th>
+                <th>Status</th>
+                <th>Accept</th>
+                <th>Reject</th>
+                <th>Delete</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% csrf_token %} {% for item in trial2 %}
+            <tr class="datarow">
+                <td>{{item.Tender_Id}}</td>
+                <td>{{item.Project_Name}}</td>
+                <td>{{item.Bid_Amount_KSh}}</td>
+                <td>{{item.Name}}</td>
+                <td>{{item.Address}}</td>
+                <td>{{item.Status}}</td>
+                <td><a href="{% url 'bid' %}">{{item.Accept}}</td>
+                <td><a href="{% url 'bid' %}">{{item.Reject}}</td>
+                <td><a href="{% url 'delete1' %}">Delete</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+
+    </table>
+
+</div>
+
+
+{% endblock %}
