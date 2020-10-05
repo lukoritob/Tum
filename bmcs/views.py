@@ -14,8 +14,6 @@ def aboard(request):
     return render(request, 'bmcs/aboard.html', {'documents':documents})
 
 def board(request,doc):
-    #for i in doc:
-    #document = Document.objects.get(pk=doc)
     documents = Document.objects.all()
     response = ''
     for i in documents:
@@ -23,11 +21,10 @@ def board(request,doc):
         if int(i.id) == int(doc):
             path = str(i.document)
             print(path)
-            response = HttpResponse(content_type=kwds.get('application/force-download')) #return HttpResponse(txt, content_type=kwds.get('mimetype','text/html'))
+            response = HttpResponse(content_type='application/force-download')  
             response['Content-Disposition'] = 'attachment; filename=%s' % smart_str(path)
             response['X-Sendfile'] = smart_str(path)
     return response
-    #return True #render(request, 'bmcs/aboard.html', {'documents':doc})
 
 
 def model_form_upload(request):
