@@ -31,5 +31,7 @@ path('display5/', views.display5, name='display5'),
 
 path('document/<str:doc>', views.board, name="document"),
 
+path('delete/<str:doc>', views.delete, name="delete"),
+
 ] 
 

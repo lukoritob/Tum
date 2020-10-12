@@ -18,7 +18,10 @@
                 <td>{{item.document}}</td>
                 <td>{{item.upload_at}}</td>
                 <td>
-                    <a href="{% url 'document' item.id %}" class="btn btn-outline-info">Download PDF</a>
+                    <a href="{% url 'document' item.id %}" class="btn btn-outline-info">Download Record</a>
+                </td>
+                <td>
+                    <a href="{% url 'delete' item.id %}" class="btn btn-outline-info">Delete Record</a>
                 </td>
             </tr>
             {% endfor %}
