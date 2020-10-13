@@ -43,7 +43,16 @@ def delete(request,doc):
     Document.objects.get(id= doc).delete()
     return redirect('doc')
 
-    
+def add(request):
+    return render(request, 'bmcs/add.html')
+
+from django.views.generic import CreateView
+from .models import Document
+
+class DocumentCreateView(CreateView):
+    model = Document
+    fields = ('description', 'document')
+
 def model_form_upload(request):
     if request.method == 'POST':
         form = DocumentForm(request.POST, request.FILES)
@@ -53,10 +62,26 @@ def model_form_upload(request):
     else:
         form = DocumentForm() #if the request is a get request we instantiate an empty form
     return render(request, 'bmcs/model_form_upload.html', {'form':form})
-
-
 def indexView(request):
     return render(request, 'bmcs/home.html')
+
+
+def save(request):
+    if request.method == 'POST':
+        form = DocumentForm(request.POST)
+        if form.is_valid():
+            document = form.save(commit=False)
+            document.description = request.description
+            document.document = document.document
+            #post.published_date = timezone.now()
+            print(document)
+            post.save()
+            return redirect('doc')
+        else:
+            return redirect('doc')
+    else:
+        return redirect('doc')
+    
 
 
 @login_required

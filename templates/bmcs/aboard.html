@@ -2,13 +2,19 @@
 <!-- documents -->
 <div class="container">
     <table class="table table-hover">
-        <h1>Documents.</h1>
+        <div class="row">
+            <h1>Documents</h1>
+            <!--<button type="button" class="btn btn-success" href="{% url 'add' %}">Add More</button>-->
+            <a href="{% url 'add' %}" class="btn btn-secondary btn-lg " role="button" aria-disabled="true">Add More</a>
+
+        </div>
         <thead>
             <tr>
                 <th>Description</th>
                 <th>Document</th>
-                <th>Upload at</th>
-                <th>Download </th>
+                <th>Date Uploaded</th>
+                <th>Download</th>
+                <th>Delete</th>
             </tr>
         </thead>
         <tbody>
