@@ -27,13 +27,22 @@ path('display1/', views.display1, name='display1'),
 path('display2/', views.display2, name='display2'),
 path('display3/', views.display3, name='display3'),
 path('display4/', views.display4, name='display4'),
-path('save/',     views.save,     name='save'),
+#path('save/',     views.save,     name='save'),
 
 path('document/<str:doc>', views.board, name="document"),
 
 path('delete/<str:doc>', views.delete, name="delete"),
 
-path('add/', views.DocumentCreateView.as_view(), name="add"),
+path('more/<str:doc>', views.more, name="more"),
+
+path('add/',       views.add,       name="add"),
+
+path('tender/',       views.add,       name="tender"),
+
+path('addTender/', views.addTender, name="addTender"),
+
+
+#path('add/', views.DocumentCreateView.as_view(), name="add"),
 
 ] 
 

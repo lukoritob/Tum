@@ -1,0 +1,11 @@
+
+
+{% extends 'index.html' %}
+{% load crispy_forms_tags %}
+{% block content %}
+<div class="container">
+    <h1><a href='/bmcs/doc/'>Back</a></h1>
+    <p><b>Name </b> : {{ document.document }}</p>
+    <p><b>Description</b> : {{ document.description }}</p>
+</div>
+{% endblock %}

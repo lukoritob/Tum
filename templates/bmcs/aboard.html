@@ -4,7 +4,6 @@
     <table class="table table-hover">
         <div class="row">
             <h1>Documents</h1>
-            <!--<button type="button" class="btn btn-success" href="{% url 'add' %}">Add More</button>-->
             <a href="{% url 'add' %}" class="btn btn-secondary btn-lg " role="button" aria-disabled="true">Add More</a>
 
         </div>
@@ -14,6 +13,7 @@
                 <th>Document</th>
                 <th>Date Uploaded</th>
                 <th>Download</th>
+                <th>Learn More</th>
                 <th>Delete</th>
             </tr>
         </thead>
@@ -25,6 +25,9 @@
                 <td>{{item.upload_at}}</td>
                 <td>
                     <a href="{% url 'document' item.id %}" class="btn btn-outline-info">Download Record</a>
+                </td>
+                <td>
+                    <a href="{% url 'more' item.id %}" class="btn btn-outline-info">Learn More</a>
                 </td>
                 <td>
                     <a href="{% url 'delete' item.id %}" class="btn btn-outline-info">Delete Record</a>

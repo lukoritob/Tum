@@ -1,8 +1,10 @@
-{% extends 'index.html' %}{% load crispy_forms_tags %}{% block content %}
-<!-- {{ trial1 }} -->
+{% extends 'index.html' %}
+{% load crispy_forms_tags %}
+{% block content %}
 <div class="container">
     <table class="table table-hover">
         <h1>Upcoming Tenders.</h1>
+        <a href="{% url 'addTender' %}" class="btn btn-secondary btn-lg " role="button" aria-disabled="true">Create a tender</a>
         <thead>
             <tr>
                 <th>Tender Id</th>
@@ -18,7 +20,7 @@
             </tr>
         </thead>
         <tbody>
-            {% csrf_token %} {% for item in trial1 %}
+            {% for item in tenders %}
             <tr class="datarow">
                 <td>{{item.Tender_Id}}</td>
                 <td>{{item.Vendors_Name}}</td>
@@ -29,12 +31,15 @@
                 <td>{{item.Tender_Type}}</td>
                 <td>{{item.Project_file}}</td>
                 <td><a href="{% url 'bid' %}">{{item.Bid}}</td>
-                <td><a href="{% url '' %}">Delete</a></td>
-                <!-- <td><form action="{% url 'employee_delete' id=instance.id %}" method="POST">
-                    {% csrf_token %}
-                    <button type="submit" name="item_id" class="btn btn-outline-info">
-                    Delete
-                </button></form></td> -->
+                <td><a href="{% url 'doc' %}">Delete</a></td>
+                <td>
+                    <form action="{% url 'doc'  %}" method="POST">
+                        {% csrf_token %}
+                        <button type="submit" name="item_id" class="btn btn-outline-info">
+                            Delete
+                        </button>
+                    </form>
+                </td>
             </tr>
             {% endfor %}
         </tbody>
