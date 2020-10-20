@@ -3,72 +3,37 @@ from django.contrib.auth.decorators import login_required
 from bmcs.forms import UserRegisterForm, DocumentForm
 from django.contrib import messages
 from django.forms import ModelForm
-from .models import UpcomingTenders,VendorsTable,Document
+from .models import UpcomingTenders,VendorsTable,Document,Bids
 from django.utils.encoding import smart_str
 from django.views.generic import CreateView
 from .models import Document
 import datetime
 
-
-# Create your views here.
-def aboard(request):
-    documents = Document.objects.all()
-    #print(paths)
-    return render(request, 'bmcs/aboard.html', {'documents':documents})
-
-def board(request,doc):
-    documents = Document.objects.all()
+@login_required
+def download(request,doc):
+    documents = UpcomingTenders.objects.all()
     response = ''
     for i in documents:
-        print(i.id)
         if int(i.id) == int(doc):
             path = str(i.document)
-            print(path)
             response = HttpResponse(content_type='application/force-download')  
             response['Content-Disposition'] = 'attachment; filename=%s' % smart_str(path)
             response['X-Sendfile'] = smart_str(path)
     return response
 
+@login_required
 def delete(request,doc):
-    Document.objects.get(id= doc).delete()
-    return redirect('doc')
+    UpcomingTenders.objects.get(id= doc).delete()
+    return redirect('dashboard')
 
-def more(request,doc):
-    document = Document.objects.get(id= doc)
-    print(document)
-    return render(request, 'bmcs/more.html',{'document':document})
+@login_required
+def details(request,doc):
+    document = UpcomingTenders.objects.get(id= doc)
+    return render(request, 'bmcs/more.html',{'document':document }) #, 'bids' : bids
 
-def add(request):
-    if request.method == 'POST':
-        if request.POST.get('description') and request.POST.get('file'):
-            document=Document()
-            document.description= request.POST.get('description')
-            document.document= request.POST.get('file')
-            document.upload_at = datetime.datetime.now()
-            document.save()
-            return redirect('doc')  
-        else:
-            return redirect('doc')
-
-    return render(request, 'bmcs/add.html')
-
-def adds(request):
-    if request.method == 'POST':
-        if request.POST.get('owner') and request.POST.get('file'):
-            print('Si mbaya')
-            document=Document()
-            document.description= request.POST.get('description')
-            document.document= request.POST.get('file')
-            document.upload_at = datetime.datetime.now()
-            document.save()
-            return redirect('doc')  
-        else:
-            return redirect('doc')
-
-    return render(request, 'bmcs/add.html')
+@login_required
 def addTender(request):
     if request.method == 'POST':
-        #print(request.POST.get('owner'))
         document=UpcomingTenders()
         print(document)
         document.Vendors_Name =     request.POST.get('owner')
@@ -77,8 +42,7 @@ def addTender(request):
         document.Project_Type =     request.POST.get('project_type')
         document.Bid_Close_Date =   request.POST.get('deadline')
         document.Tender_Type =      request.POST.get('type')
-        document.Project_file =     request.POST.get('file')
-        document.Bid =              request.POST.get('bid')
+        document.document  =        request.POST.get('document') #request.POST.get('document')
         document.save()
         return redirect('dashboard')  
     else:
@@ -88,33 +52,13 @@ def addTender(request):
 
 
 
-
-
-
-class DocumentCreateView(CreateView):
-    model = Document
-    fields = ('description', 'document')
-
-def model_form_upload(request):
-    if request.method == 'POST':
-        form = DocumentForm(request.POST, request.FILES)
-        if form.is_valid():
-            form.save()
-            return redirect('doc')
-    else:
-        form = DocumentForm() #if the request is a get request we instantiate an empty form
-    return render(request, 'bmcs/model_form_upload.html', {'form':form})
-def indexView(request):
-    return render(request, 'bmcs/home.html')
-
-
 @login_required
-def dashboardView(request):
+def dashboard(request):
     tenders = UpcomingTenders.objects.all()
     return render(request, 'bmcs/dashboard.html',{'tenders': tenders})
 
 
-def registerView(request):
+def register(request):
     if request.method == "POST":
             form = UserRegisterForm(request.POST)
             if form.is_valid():
@@ -126,103 +70,17 @@ def registerView(request):
         form = UserRegisterForm()
     return render(request, 'bmcs/register.html',{'form':form})
 
-class UpcomingTendersForm(ModelForm):
-    class Meta:
-        model = UpcomingTenders
-        fields = '__all__'
-def query1(request):
-        trial1 = UpcomingTenders.objects.all()
-        form = UpcomingTendersForm(request.POST or None)
-        if form.is_valid():
-            form.save()
-        context = {
-            'trial1':trial1,
-            'form':form
-        }
-        return render(request, 'bmcs/input1.html' ,context)
-# def query1(request):
-class VendorsTableForm(ModelForm):
-    class Meta:
-        model = VendorsTable
-        fields = '__all__'
-def query2(request):
-        trial2 = VendorsTable.objects.all()
-        form = VendorsTableForm(request.POST or None)
-        if form.is_valid():
-            form.save()
-        context = {
-            'trial2':trial2,
-            'form':form
-        }
-        return render(request,'bmcs/input2.html',context)
 
-def query3(request):
-        context = {
-        }
-        return render(request,'bmcs/input3.html',context)
+@login_required
+def bid(request, doc):
+    tender = UpcomingTenders.objects.get(id= doc)
+    if request.method == 'POST':
+        bid = Bids()
+        bid.tender = tender
+        bid.text = request.POST.get('text')
+        bid.author = request.user
+        bid.save()
+        return redirect('more', doc)  
+    else:
+        return render(request, 'bmcs/bid.html' ,{ 'tender' : doc})  
 
-def query4(request):
-    context = {
-    }
-    return render(request,'bmcs/input4.html',context)
-
-def query5(request):
-    context = {
-    }
-    return render(request,'bmcs/input5.html',context)
-
-def deleteme1(request, Tender_Id):
-    employee=UpcomingTenders.objects.get(pk=Tender_Id)
-    employee.delete()
-    return redirect('/bmcs/display1')
-def bid(request):
-    context = {
-    }
-    return render(request,'bmcs/edit.html',context)   
-
-def edit(request):
-    context = {
-    }
-    return render(request,'bmcs/edit.html',context)
-
-def deleteme3(request):
-    context = {
-    }
-    return render(request,'bmcs/delete3.html',context)
-
-def deleteme4(request):
-    context = {
-    }
-    return render(request,'bmcs/delete4.html',context)
-
-def deleteme5(request):
-    context = {
-    }
-    return render(request,'bmcs/delete5.html',context)
-
-def display1(request):
-    trial1 = UpcomingTenders.objects.all()
-    context={
-        'trial1':trial1
-    }
-    return render(request, 'bmcs/display1.html',context)
-def display2(request):
-    trial2 = VendorsTable.objects.all()
-    context = {
-        'trial2':trial2
-    }
-    return render(request, 'bmcs/display2.html',context)
-def display3(request):
-    context ={
-    }
-    return render(request, 'bmcs/display3.html',context)
-def display4(request):
-    context={
-        
-    }
-    return render(request,'bmcs/display4.html',context)
-def display5(request):
-    context = {
-        
-    }
-    return render(request, 'bmcs/display5.html',context)

@@ -4,8 +4,21 @@
 {% load crispy_forms_tags %}
 {% block content %}
 <div class="container">
-    <h1><a href='/bmcs/doc/'>Back</a></h1>
-    <p><b>Name </b> : {{ document.document }}</p>
-    <p><b>Description</b> : {{ document.description }}</p>
+    <h1><a href='/bmcs/'>Dashboard</a></h1>
+    <p><b>Name </b> : {{ document.Project_Name }}</p>
+    <p><b>Type </b> : {{ document.Project_Type }}</p>
+    <p><a href="{% url 'bid' document.id  %}" class="btn btn-primary " role="button" aria-disabled="true">Make a Bid</a>
+    
+    <div class="container">
+        {% for comment in document.bids.all %}
+        <div class="comment">
+          <p>{{ comment.text }}</p>
+          <p style="color: #73008c;" class="text-muted">Created by: <i><b><a href="#">{{ comment.author }}</a></b></i> on {{ comment.created_date }}</p>
+          <br/>
+	    </div>
+    {% empty %}
+    <p>No Bids here yet</p>
+  {% endfor %}
+    </div>
 </div>
 {% endblock %}

@@ -2,44 +2,39 @@
 {% load crispy_forms_tags %}
 {% block content %}
 <div class="container">
+    <div class="row mt-3">
+        <a href="{% url 'addTender' %}" class="btn btn-primary" role="button" aria-disabled="true">Create a tender</a>
+    </div>
+    <br/>
     <table class="table table-hover">
-        <h1>Upcoming Tenders.</h1>
-        <a href="{% url 'addTender' %}" class="btn btn-secondary btn-lg " role="button" aria-disabled="true">Create a tender</a>
+       <!-- <h1>Upcoming Tenders</h1>-->
         <thead>
             <tr>
-                <th>Tender Id</th>
-                <th>Vendors Name</th>
-                <th>Project Name</th>
-                <th>Project Type</th>
-                <th>Basic Amount Ksh</th>
-                <th>Bid Close Date</th>
-                <th>Tender Type</th>
-                <th>Project File</th>
-                <th>Bid</th>
+                <th>Tender</th>
+                <th>VendorsName</th>
+                <th>Project</th>
+                <th>Type</th>
+                <th>Amount</th>
+                <th>Due Date</th>
+                <th>TenderType</th>
+                <th>Download File</th>
                 <th>Delete</th>
+                <th>Info</th>
             </tr>
         </thead>
         <tbody>
             {% for item in tenders %}
             <tr class="datarow">
-                <td>{{item.Tender_Id}}</td>
+                <td>{{item.id }}</td>
                 <td>{{item.Vendors_Name}}</td>
                 <td>{{item.Project_Name}}</td>
                 <td>{{item.Project_Type}}</td>
                 <td>{{item.Basic_Amount_Ksh}}</td>
                 <td>{{item.Bid_Close_Date}}</td>
                 <td>{{item.Tender_Type}}</td>
-                <td>{{item.Project_file}}</td>
-                <td><a href="{% url 'bid' %}">{{item.Bid}}</td>
-                <td><a href="{% url 'doc' %}">Delete</a></td>
-                <td>
-                    <form action="{% url 'doc'  %}" method="POST">
-                        {% csrf_token %}
-                        <button type="submit" name="item_id" class="btn btn-outline-info">
-                            Delete
-                        </button>
-                    </form>
-                </td>
+                <td><a href="{% url 'download' item.id %}" class="btn btn-outline-info">{{item.document }}</a></td>
+                <td><a href="{% url 'delete' item.id %}" class="btn btn-outline-danger"> Delete</a></td>
+                <td><a href="{% url 'details' item.id  %}" class="btn btn-outline-info"> Bid</td>
             </tr>
             {% endfor %}
         </tbody>
@@ -47,6 +42,5 @@
     </table>
 
 </div>
-
 
 {% endblock %}

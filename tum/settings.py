@@ -134,4 +134,4 @@ STATICFILES_DIRS = (
     os.path.join(BASE_DIR, "templates/static")
 )
 
-LOGIN_REDIRECT_URL = '/bmcs/doc/'
+LOGIN_REDIRECT_URL = '/bmcs/dashboard'
