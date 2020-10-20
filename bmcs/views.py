@@ -9,6 +9,20 @@ from django.views.generic import CreateView
 from .models import Document
 import datetime
 
+
+@login_required
+def board(request,doc):
+    documents = Document.objects.all()
+    response = ''
+    for i in documents:
+        if int(i.id) == int(doc):
+            path = str(i.document)
+            response = HttpResponse(content_type='application/force-download')  
+            response['Content-Disposition'] = 'attachment; filename=%s' % smart_str(path)
+            response['X-Sendfile'] = smart_str(path)
+    return response
+
+
 @login_required
 def download(request,doc):
     documents = UpcomingTenders.objects.all()
